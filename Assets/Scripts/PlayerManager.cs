@@ -49,6 +49,21 @@ public class PlayerManager : MonoBehaviour {
             SceneManager.LoadScene(0);
     }
 
+    public void CenterLastCell(Cell destroyedCell) {
+        int numberOfCells = 0;
+        foreach (Cell c in activeCells)
+            if (c != null && c != destroyedCell)
+                numberOfCells++;
+
+        if (numberOfCells == 1) {
+            foreach (Cell c in activeCells)
+                if (c != null && c != destroyedCell) {
+                    c.SetPosition(0, 0);
+                    break;
+                }
+        }
+    }
+
     void Movement() {
         float x, y;
 

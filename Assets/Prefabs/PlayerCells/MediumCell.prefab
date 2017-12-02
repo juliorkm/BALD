@@ -50,7 +50,7 @@ Rigidbody2D:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1556090852556372}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -96,6 +96,8 @@ MonoBehaviour:
   - {fileID: 21300000, guid: a8af63f65d220ce4e9141dcf31bafa83, type: 3}
   - {fileID: 21300000, guid: 78a797f0ee321dc44bdfe6b50f4a18cd, type: 3}
   bullet: {fileID: 1710082525844300, guid: 8730b8e6844901743845cf9accf5beba, type: 2}
+  hurtParticle: {fileID: 1575675699158648, guid: 11d4266e9c7df174ab2ad5fec75cc937,
+    type: 2}
   shootCooldown: 0.8
 --- !u!212 &212493952131996334
 SpriteRenderer:

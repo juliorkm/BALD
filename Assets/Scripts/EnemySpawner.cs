@@ -5,7 +5,9 @@ using UnityEngine;
 public class EnemySpawner : MonoBehaviour {
 
     [SerializeField]
-    private GameObject enemyBullet;
+    private GameObject[] enemyCells;
+    [SerializeField]
+    private float[] chance;
     [SerializeField]
     private float cooldown;
 
@@ -21,7 +23,15 @@ public class EnemySpawner : MonoBehaviour {
 
     IEnumerator SpawnBullets() {
         while (true) {
-            Instantiate(enemyBullet, new Vector3(transform.position.x, Random.Range(-4,4),0), Quaternion.identity);
+            float r = Random.Range(0f, 1f);
+            int i = 0;
+            for (; i < enemyCells.Length; i++) {
+                if (r <= chance[i])
+                    break;
+                else
+                    r -= chance[i];
+            }
+            Instantiate(enemyCells[i], new Vector3(transform.position.x, Random.Range(-4,4),0), Quaternion.identity);
             yield return new WaitForSeconds(cooldown);
         }
     }

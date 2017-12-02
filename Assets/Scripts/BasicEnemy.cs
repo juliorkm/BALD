@@ -2,17 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Cell : MonoBehaviour {
+public class BasicEnemy : MonoBehaviour {
 
     public int health;
-    public CellState cellstate;
-    private float targetPosition = 0, centerPosition = 0;
-
-    [HideInInspector]
-    public bool regroup = false;
+    [SerializeField]
+    private float speed;
 
     private SpriteRenderer sr;
-    private PlayerManager pm;
+    private Rigidbody2D rb;
 
     [SerializeField]
     private Sprite[] healthSprites;
@@ -23,50 +20,52 @@ public class Cell : MonoBehaviour {
     [SerializeField]
     private float shootCooldown;
 
+    private float position;
+
     // Use this for initialization
     void Start () {
         sr = GetComponent<SpriteRenderer>();
-        pm = GetComponentInParent<PlayerManager>();
+        rb = GetComponent<Rigidbody2D>();
 
-        StartCoroutine(Shoot());
-	}
+        position = Random.Range(2f, 6f);
+    }
 	
 	// Update is called once per frame
 	void Update () {
-        if (!regroup) LerpVerticalPosition();
+        Movement();
         UpdateHealthSprite();
-	}
-
-    public void SetPosition(float target, float center) {
-        targetPosition = target;
-        centerPosition = center;
-    }
-
-    void LerpVerticalPosition() {
-        transform.localPosition = Vector3.Lerp(transform.localPosition, new Vector3(0, centerPosition + targetPosition, transform.localPosition.z), .3f);
     }
 
     void UpdateHealthSprite() {
         if (health > 0)
             sr.sprite = healthSprites[health - 1];
         else {
-            pm.CenterLastCell(this);
             Destroy(gameObject);
         }
     }
 
     IEnumerator Shoot() {
         while (true) {
-            if (Input.GetMouseButton(0)) {
-                pm.SetCountdownToMerge(false);
-                Instantiate(bullet, transform.position, Quaternion.identity);
-                yield return new WaitForSeconds(shootCooldown);
-            } else yield return new WaitForEndOfFrame();
+            Instantiate(bullet, transform.position, Quaternion.identity);
+            yield return new WaitForSeconds(shootCooldown);
         }
     }
 
+    void Movement() {
+        if (transform.position.x > position)
+            rb.velocity = new Vector3(-speed, 0, 0);
+        else if (transform.position.x <= position && rb.velocity.x < 0) {
+            rb.velocity = new Vector3(0, (Random.Range(0, 2) * 2 - 1) * speed, 0);  // random between -1 and 1
+            StartCoroutine(Shoot()); // starts shooting once it stops moving forwards
+        }
+        else if (transform.position.y > 3f)
+            rb.velocity = new Vector3(0, -speed, 0);
+        else if (transform.position.y < -3f)
+            rb.velocity = new Vector3(0, speed, 0);
+    }
+
     private void OnTriggerEnter2D(Collider2D collision) {
-        if (collision.CompareTag("EnemyBullet")) {
+        if (collision.CompareTag("PlayerBullet")) {
             if (collision != null) {
                 var p = Instantiate(hurtParticle, collision.transform.position, Quaternion.identity);
                 Destroy(p, p.GetComponent<ParticleSystem>().main.duration);

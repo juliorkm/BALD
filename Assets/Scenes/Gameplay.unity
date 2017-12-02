@@ -273,9 +273,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94dbf1d17637c91478684c64ab7f54bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyBullet: {fileID: 1975675938939500, guid: 90459041de297fc4cb50fabc604bd9fd,
-    type: 2}
-  cooldown: 5
+  enemyCells:
+  - {fileID: 1034088119231290, guid: 44fb15e982e43524f9382b92b4a12ce0, type: 2}
+  - {fileID: 1623313359454936, guid: 8267373c7ab5e2a48a8daa2ac1bd42ce, type: 2}
+  - {fileID: 1168802630563396, guid: acb52b99d7121b746bd6b0bf7676f10a, type: 2}
+  chance:
+  - 0.1
+  - 0.5
+  - 0.4
+  cooldown: 7
 --- !u!4 &520387124
 Transform:
   m_ObjectHideFlags: 0
