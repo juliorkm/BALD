@@ -58,9 +58,9 @@ public class BasicEnemy : MonoBehaviour {
             rb.velocity = new Vector3(0, (Random.Range(0, 2) * 2 - 1) * speed, 0);  // random between -1 and 1
             StartCoroutine(Shoot()); // starts shooting once it stops moving forwards
         }
-        else if (transform.position.y > 3f)
+        else if (transform.position.y > 4.3f)
             rb.velocity = new Vector3(0, -speed, 0);
-        else if (transform.position.y < -3f)
+        else if (transform.position.y < -4.3f)
             rb.velocity = new Vector3(0, speed, 0);
     }
 

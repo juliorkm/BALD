@@ -92,8 +92,8 @@ MonoBehaviour:
   health: 2
   speed: 5
   healthSprites:
-  - {fileID: 21300000, guid: a8af63f65d220ce4e9141dcf31bafa83, type: 3}
-  - {fileID: 21300000, guid: 78a797f0ee321dc44bdfe6b50f4a18cd, type: 3}
+  - {fileID: 21300000, guid: e1136a7508dae5943a10f24cff7a015d, type: 3}
+  - {fileID: 21300000, guid: c4a5b9e5ddb6b404db9882ec0ab52516, type: 3}
   bullet: {fileID: 1975675938939500, guid: 90459041de297fc4cb50fabc604bd9fd, type: 2}
   hurtParticle: {fileID: 1136730133921176, guid: 2e949b1e700c9694aba6039d837518e3,
     type: 2}
@@ -131,7 +131,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 0}
-  m_Color: {r: 0, g: 0.7921569, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 1
   m_FlipY: 0
   m_DrawMode: 0
