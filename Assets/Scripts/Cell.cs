@@ -93,5 +93,12 @@ public class Cell : MonoBehaviour {
             }
             this.health--;
         }
+        else if (collision.CompareTag("Enemy") && !regroup) {
+            if (collision != null) {
+                var p = Instantiate(hurtParticle, collision.transform.position, Quaternion.identity);
+                Destroy(p, p.GetComponent<ParticleSystem>().main.duration);
+            }
+            this.health--;
+        }
     }
 }
