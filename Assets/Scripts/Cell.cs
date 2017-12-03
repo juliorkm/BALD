@@ -51,6 +51,7 @@ public class Cell : MonoBehaviour {
             sr.sprite = healthSprites[health - 1];
         else {
             pm.CenterLastCell(this);
+            pm.CheckIfAllDead(this);
             Destroy(gameObject);
         }
     }

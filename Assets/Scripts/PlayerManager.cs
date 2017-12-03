@@ -45,8 +45,6 @@ public class PlayerManager : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.A))
             StartCoroutine(Merge());
-        if (Input.GetKeyDown(KeyCode.R))
-            SceneManager.LoadScene(0);
     }
 
     public void CenterLastCell(Cell destroyedCell) {
@@ -263,6 +261,15 @@ public class PlayerManager : MonoBehaviour {
             }
         }
         */
+    }
+
+    public void CheckIfAllDead(Cell cell) {
+        foreach (Cell c in activeCells) {
+            if (c != null && c != cell) return;
+        }
+
+        var ts = GameObject.FindObjectOfType<TitleScreen>();
+        StartCoroutine(ts.ToGameOver());
     }
 
     public void SetCountdownToMerge(bool shouldMerge) {
