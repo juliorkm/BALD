@@ -25,7 +25,7 @@ GameObject:
   - component: {fileID: 50087247455120462}
   m_Layer: 8
   m_Name: MediumCell
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

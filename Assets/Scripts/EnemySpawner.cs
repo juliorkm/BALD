@@ -7,13 +7,18 @@ public class EnemySpawner : MonoBehaviour {
     [SerializeField]
     private GameObject[] enemyCells;
     [SerializeField]
+    private GameObject healPickUp;
+    [SerializeField]
     private float[] chance;
     [SerializeField]
     private float cooldown;
+    [SerializeField]
+    private float healCooldown;
 
     // Use this for initialization
     void Start () {
-        StartCoroutine(SpawnBullets());
+        StartCoroutine(SpawnEnemies());
+        StartCoroutine(SpawnHeal());
 
         //TestChance();   //funciona!
     }
@@ -23,7 +28,7 @@ public class EnemySpawner : MonoBehaviour {
 
     }
 
-    IEnumerator SpawnBullets() {
+    IEnumerator SpawnEnemies() {
         while (true) {
             float r = Random.Range(0f, 1f);
             int i = 0;
@@ -35,6 +40,13 @@ public class EnemySpawner : MonoBehaviour {
             }
             Instantiate(enemyCells[i], new Vector3(transform.position.x, Random.Range(-4,4),0), Quaternion.identity);
             yield return new WaitForSeconds(cooldown);
+        }
+    }
+
+    IEnumerator SpawnHeal() {
+        while (true) {
+            yield return new WaitForSeconds(healCooldown);
+            Instantiate(healPickUp, new Vector3(transform.position.x, 0, 0), Quaternion.identity);
         }
     }
 

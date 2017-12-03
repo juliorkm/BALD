@@ -65,6 +65,15 @@ public class Cell : MonoBehaviour {
         }
     }
 
+    public bool CanBeHealed() {
+        return (cellstate == CellState.BIG && health < 4) || (cellstate == CellState.MEDIUM && health < 2);
+    }
+
+    public void GetHealed(int healAmount) {
+        if (cellstate == CellState.BIG && health <= 4 - healAmount) health += healAmount;
+        else if (cellstate == CellState.MEDIUM && health <= 2 - healAmount) health += healAmount;
+    }
+
     private void OnTriggerEnter2D(Collider2D collision) {
         if (collision.CompareTag("EnemyBullet")) {
             if (collision != null) {
