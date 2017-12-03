@@ -34,12 +34,14 @@ public class TitleScreen : MonoBehaviour {
     public IEnumerator StartGame() {
         while (titleScreenUI[0].localScale.y > .1f) {
             foreach (Transform t in titleScreenUI) {
-                t.localScale = new Vector3(Mathf.Lerp(t.localScale.x, 2f, .2f), Mathf.Lerp(t.localScale.y, 0, .2f), 1);
+                if (t != null)
+                    t.localScale = new Vector3(Mathf.Lerp(t.localScale.x, 2f, .2f), Mathf.Lerp(t.localScale.y, 0, .2f), 1);
             }
             yield return new WaitForSeconds(.02f);
         }
         foreach (Transform t in titleScreenUI) {
-            t.localScale = new Vector3(2, 0, 1);
+            if (t != null)
+                t.localScale = new Vector3(2, 0, 1);
         }
         enemySpawner.gameObject.SetActive(true);
     }

@@ -11,6 +11,8 @@ public enum CellState {
 
 public class PlayerManager : MonoBehaviour {
 
+    public static CellState difficulty = CellState.BIG;
+
     public const float distanceBetweenCells = .75f;
 
     [SerializeField]
@@ -28,7 +30,14 @@ public class PlayerManager : MonoBehaviour {
 
     // Use this for initialization
     void Awake () {
-        var v1 = Instantiate(bigCellPrefab, transform.position, Quaternion.identity, transform);
+        GameObject v1;
+        if (difficulty == CellState.BIG)
+            v1 = Instantiate(bigCellPrefab, transform.position, Quaternion.identity, transform);
+        else if (difficulty == CellState.MEDIUM)
+            v1 = Instantiate(mediumCellPrefab, transform.position, Quaternion.identity, transform);
+        else
+            v1 = Instantiate(smallCellPrefab, transform.position, Quaternion.identity, transform);
+
         Cell c1 = v1.GetComponent<Cell>();
 
         activeCells = new List<Cell>();

@@ -11,6 +11,8 @@ public class PlayButton : MonoBehaviour {
     private TitleScreen ts;
     [SerializeField]
     private Transform player;
+    [SerializeField]
+    private CellState difficulty;
 
     private bool startedTheGame = false;
 
@@ -23,6 +25,7 @@ public class PlayButton : MonoBehaviour {
             startedTheGame = true;
             Destroy(playText.gameObject);
             StartCoroutine(ts.StartGame());
+            PlayerManager.difficulty = difficulty;
             player.gameObject.SetActive(true);
             player.position = transform.position;
             transform.position = new Vector3(10000, 10000, 1);
