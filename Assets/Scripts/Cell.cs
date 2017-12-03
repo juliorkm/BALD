@@ -23,6 +23,9 @@ public class Cell : MonoBehaviour {
     [SerializeField]
     private float shootCooldown;
 
+    [HideInInspector]
+    public float silenceDuration = 0;
+
     // Use this for initialization
     void Start () {
         sr = GetComponent<SpriteRenderer>();
@@ -33,7 +36,7 @@ public class Cell : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (!regroup) LerpVerticalPosition();
+        LerpVerticalPosition();
         UpdateHealthSprite();
 	}
 
@@ -58,6 +61,10 @@ public class Cell : MonoBehaviour {
 
     IEnumerator Shoot() {
         while (true) {
+            if (silenceDuration > 0) {
+                yield return new WaitForSeconds(silenceDuration);
+                silenceDuration = 0;
+            }
             if (Input.GetMouseButton(0)) {
                 pm.SetCountdownToMerge(false);
                 Instantiate(bullet, transform.position, Quaternion.identity);
@@ -71,12 +78,14 @@ public class Cell : MonoBehaviour {
     }
 
     public void GetHealed(int healAmount) {
-        if (cellstate == CellState.BIG && health <= 4 - healAmount) health += healAmount;
-        else if (cellstate == CellState.MEDIUM && health <= 2 - healAmount) health += healAmount;
+        if (!regroup) {
+            if (cellstate == CellState.BIG && health <= 4 - healAmount) health += healAmount;
+            else if (cellstate == CellState.MEDIUM && health <= 2 - healAmount) health += healAmount;
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision) {
-        if (collision.CompareTag("EnemyBullet")) {
+        if (collision.CompareTag("EnemyBullet") && !regroup) {
             if (collision != null) {
                 var p = Instantiate(hurtParticle, collision.transform.position, Quaternion.identity);
                 Destroy(p, p.GetComponent<ParticleSystem>().main.duration);

@@ -24,15 +24,17 @@ public class PlayerManager : MonoBehaviour {
                     mediumCellPrefab,
                     smallCellPrefab;
 
-    [SerializeField]
-    private Cell startingCell;
-
     private List<Cell> activeCells;
 
     // Use this for initialization
-    void Start () {
+    void Awake () {
+        var v1 = Instantiate(bigCellPrefab, transform.position, Quaternion.identity, transform);
+        Cell c1 = v1.GetComponent<Cell>();
+
         activeCells = new List<Cell>();
-        activeCells.Add(startingCell);
+        activeCells.Add(c1);
+
+        GetSilenced(1f);
 	}
 	
 	// Update is called once per frame
@@ -43,8 +45,10 @@ public class PlayerManager : MonoBehaviour {
 
         //----DEBUG----
 
-        if (Input.GetKeyDown(KeyCode.A))
-            StartCoroutine(Merge());
+        //if (Input.GetKeyDown(KeyCode.A))
+        //    StartCoroutine(Merge());
+        //if (Input.GetKeyDown(KeyCode.D))
+        //    foreach (Cell c in activeCells) c.regroup = true;
     }
 
     public void CenterLastCell(Cell destroyedCell) {
@@ -165,12 +169,17 @@ public class PlayerManager : MonoBehaviour {
             if (c != null) {
                 totalHealth += c.health;
                 numberOfCells++;
+                c.regroup = true;
                 if (c.cellstate == CellState.SMALL)
                     thereIsSmall = true;
             }
         }
 
-        if (numberOfCells < 2) yield break;
+        if (numberOfCells < 2) {
+            foreach (Cell c in activeCells)
+                if (c != null) c.regroup = false;
+            yield break;
+        }
 
         if (totalHealth > 2 || !thereIsSmall) {
             foreach (Cell c in activeCells) {
@@ -270,6 +279,11 @@ public class PlayerManager : MonoBehaviour {
 
         var ts = GameObject.FindObjectOfType<TitleScreen>();
         StartCoroutine(ts.ToGameOver());
+    }
+    
+    public void GetSilenced(float duration) {
+        foreach (Cell c in activeCells)
+            c.silenceDuration += duration;
     }
 
     public void SetCountdownToMerge(bool shouldMerge) {

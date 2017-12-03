@@ -21,12 +21,14 @@ public class Heal : MonoBehaviour {
     private GameObject healParticle;
 
     private SpriteRenderer sr;
-    private Rigidbody2D rb;
+    private float initialTime;
 
     // Use this for initialization
     void Start () {
         sr = GetComponent<SpriteRenderer>();
-        rb = GetComponent<Rigidbody2D>();
+
+        initialTime = Time.time;
+        transform.position = new Vector3(transform.position.x, transform.position.y - sinHeight / 2, transform.position.z);
     }
 	
 	// Update is called once per frame
@@ -35,8 +37,14 @@ public class Heal : MonoBehaviour {
         Pulse();
 	}
 
+    float LocalTime() {
+        return Time.time - initialTime;
+    }
+
     void Movement() {
-        rb.velocity = new Vector3(-speed, Mathf.Sin(Time.time * sinWidth) * sinHeight, transform.position.z);
+        transform.position -= Vector3.right * speed * Time.deltaTime ;
+        transform.position = new Vector3(transform.position.x, Mathf.Sin(LocalTime() * sinWidth) * sinHeight, transform.position.z);
+        //rb.velocity = new Vector3(-speed, Mathf.Sin(LocalTime() * sinWidth) * sinHeight, 0);
         if (transform.position.x < -10) Destroy(gameObject);
     }
 
