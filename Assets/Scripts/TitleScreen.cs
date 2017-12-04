@@ -39,6 +39,7 @@ public class TitleScreen : MonoBehaviour {
             if (Input.GetKeyDown(KeyCode.Escape))
                 StartCoroutine(ExitGame());
         } else if (state == SceneState.INTRO) {
+            if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter)) {
                 canceledTheText = true;
             }
         } else if (state == SceneState.GAMEPLAY) {
