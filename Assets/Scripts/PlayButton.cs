@@ -24,12 +24,12 @@ public class PlayButton : MonoBehaviour {
         if (!startedTheGame) {
             startedTheGame = true;
             Destroy(playText.gameObject);
-            StartCoroutine(ts.StartGame());
+            ts.CoroutineStarter(ts.StartGame());
             PlayerManager.difficulty = difficulty;
             player.gameObject.SetActive(true);
             player.position = transform.position;
             transform.position = new Vector3(10000, 10000, 1);
-            Destroy(gameObject, 15f);
+            Destroy(gameObject);
         }
     }
 
