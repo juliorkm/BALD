@@ -28,8 +28,14 @@ public class PlayerManager : MonoBehaviour {
 
     private List<Cell> activeCells;
 
+    private Vector2 screenBoundsUpper;
+    private Vector2 screenBoundsLower;
+
     // Use this for initialization
     void Awake () {
+        screenBoundsUpper = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
+        screenBoundsLower = Camera.main.ScreenToWorldPoint(new Vector2(0, 0));
+
         GameObject v1;
         if (difficulty == CellState.BIG)
             v1 = Instantiate(bigCellPrefab, transform.position, Quaternion.identity, transform);
@@ -48,7 +54,7 @@ public class PlayerManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        Movement();
+        if (activeCells.Count > 0) Movement();
         Split();
         CountdownToMerge();
 
@@ -58,6 +64,10 @@ public class PlayerManager : MonoBehaviour {
         //    StartCoroutine(Merge());
         //if (Input.GetKeyDown(KeyCode.D))
         //    foreach (Cell c in activeCells) c.regroup = true;
+    }
+
+    public void RemoveCell(Cell c) {
+        activeCells.Remove(c);
     }
 
     public void CenterLastCell(Cell destroyedCell) {
@@ -77,26 +87,25 @@ public class PlayerManager : MonoBehaviour {
 
     void Movement() {
         float x, y;
+        Vector2 worldMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-        if (Input.mousePosition.y < Screen.height) {
-            if (Input.mousePosition.y > 0)
-                y = Input.mousePosition.y;
+        if (worldMousePosition.y < screenBoundsUpper.y - activeCells[0].transform.localPosition.y) {
+            if (worldMousePosition.y > screenBoundsLower.y - activeCells[activeCells.Count - 1].transform.localPosition.y)
+                y = worldMousePosition.y;
             else
-                y = 0;
-        } else y = Screen.height;
+                y = screenBoundsLower.y - activeCells[activeCells.Count - 1].transform.localPosition.y;
+        } else y = screenBoundsUpper.y - activeCells[0].transform.localPosition.y;
 
-        if (Input.mousePosition.x < Screen.width) {
-            if (Input.mousePosition.x > 0)
-                x = Input.mousePosition.x;
+        if (worldMousePosition.x < screenBoundsUpper.x) {
+            if (worldMousePosition.x > screenBoundsLower.x)
+                x = worldMousePosition.x;
             else
-                x = 0;
-        } else x = Screen.width;
+                x = screenBoundsLower.x;
+        } else x = screenBoundsUpper.x;
 
-        Vector3 mousePosition = new Vector3(x, y, Input.mousePosition.z);
+        Vector3 mousePosition = new Vector3(x, y, 0);
 
-        Vector3 aux = Camera.main.ScreenToWorldPoint(mousePosition);
-
-        transform.position = Vector3.Lerp(transform.position, new Vector3(aux.x, aux.y, transform.position.z), .2f);
+        transform.position = Vector3.Lerp(transform.position, new Vector3(mousePosition.x, mousePosition.y, transform.position.z), .2f);
     }
 
     void Split() {

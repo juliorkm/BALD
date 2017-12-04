@@ -55,6 +55,7 @@ public class Cell : MonoBehaviour {
         else {
             pm.CenterLastCell(this);
             pm.CheckIfAllDead(this);
+            pm.RemoveCell(this);
             Destroy(gameObject);
         }
     }

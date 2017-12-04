@@ -17,9 +17,6 @@ public class TitleScreen : MonoBehaviour {
 	}
 
     IEnumerator OpenCurtain() {
-        Time.timeScale = 20f;
-        yield return new WaitForSeconds(5f);
-        Time.timeScale = 1f;
         while (blackScreen[0].transform.localScale.y > .1f) {
             foreach (Transform b in blackScreen) {
                 b.localScale = new Vector3(1, Mathf.Lerp(b.localScale.y, 0, .2f),1);
