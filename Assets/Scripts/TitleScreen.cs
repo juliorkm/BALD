@@ -8,7 +8,7 @@ public enum SceneState {
     TITLE,
     INTRO,
     GAMEPLAY,
-    GAMEOVER
+    NO_ESC
 }
 
 public class TitleScreen : MonoBehaviour {
@@ -26,8 +26,10 @@ public class TitleScreen : MonoBehaviour {
     private float textDuration = 1.5f;
     [SerializeField]
     private Text dialoguePosition;
+    [SerializeField]
+    private Image dialogueBackdrop;
 
-    private SceneState state = SceneState.TITLE;
+    private SceneState state = SceneState.NO_ESC;
     private bool canceledTheText = false;
 
     void Start () {
@@ -35,16 +37,21 @@ public class TitleScreen : MonoBehaviour {
 	}
 
     private void Update() {
+
+        #if !UNITY_WEBGL
         if (state == SceneState.TITLE) {
             if (Input.GetKeyDown(KeyCode.Escape))
                 StartCoroutine(ExitGame());
-        } else if (state == SceneState.INTRO) {
+        } else
+        #endif 
+
+        if (state == SceneState.INTRO) {
             if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter)) {
                 canceledTheText = true;
             }
         } else if (state == SceneState.GAMEPLAY) {
             if (Input.GetKeyDown(KeyCode.Escape))
-                StartCoroutine(ToGameOver());
+                StartCoroutine(ToTitleScreen());
         }
 
     }
@@ -59,6 +66,7 @@ public class TitleScreen : MonoBehaviour {
         foreach (Transform b in blackScreen) {
             b.localScale = new Vector3(1, 0, 1);
         }
+        state = SceneState.TITLE;
     }
 
     IEnumerator ExitGame() {
@@ -135,8 +143,35 @@ public class TitleScreen : MonoBehaviour {
         state = SceneState.GAMEPLAY;
     }
 
+    public IEnumerator ToTitleScreen() {
+        state = SceneState.NO_ESC;
+        
+        while (blackScreen[0].transform.localScale.y < .99f) {
+            foreach (Transform b in blackScreen) {
+                b.localScale = new Vector3(1, Mathf.Lerp(b.localScale.y, 1, .2f), 1);
+            }
+            yield return new WaitForSeconds(.02f);
+        }
+        foreach (Transform b in blackScreen) {
+            b.localScale = new Vector3(1, 1, 1);
+        }
+        SceneManager.LoadScene(0);
+    }
+
     public IEnumerator ToGameOver() {
-        state = SceneState.GAMEOVER;
+        state = SceneState.NO_ESC;
+
+        dialoguePosition.text = "Game Over";
+        while (dialoguePosition.color.a < .99f) {
+            dialoguePosition.color = new Color(0.5f, 0, 0, Mathf.Lerp(dialoguePosition.color.a, 1, .2f));
+            dialogueBackdrop.color = new Color(0f, 0f, 0f, dialoguePosition.color.a * .7f);
+            yield return new WaitForSeconds(.02f);
+        }
+
+        dialoguePosition.color = new Color(0.5f, 0, 0, 1);
+        dialogueBackdrop.color = new Color(0f, 0f, 0f, .7f);
+        yield return new WaitForSeconds(textDuration);
+
         while (blackScreen[0].transform.localScale.y < .99f) {
             foreach (Transform b in blackScreen) {
                 b.localScale = new Vector3(1, Mathf.Lerp(b.localScale.y, 1, .2f), 1);
