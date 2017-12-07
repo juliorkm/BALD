@@ -14,6 +14,9 @@ public class PlayButton : MonoBehaviour {
     [SerializeField]
     private CellState difficulty;
 
+    [SerializeField]
+    private AudioClip audioClip;
+
     private bool startedTheGame = false;
 
     private void Update() {
@@ -23,6 +26,7 @@ public class PlayButton : MonoBehaviour {
     private void OnMouseDown() {
         if (!startedTheGame) {
             startedTheGame = true;
+            ts.GetComponent<AudioSource>().PlayOneShot(audioClip);
             Destroy(playText.gameObject);
             ts.CoroutineStarter(ts.StartGame());
             PlayerManager.difficulty = difficulty;

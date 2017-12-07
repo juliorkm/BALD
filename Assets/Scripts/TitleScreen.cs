@@ -32,7 +32,10 @@ public class TitleScreen : MonoBehaviour {
     private SceneState state = SceneState.NO_ESC;
     private bool canceledTheText = false;
 
+    private AudioSource aS;
+
     void Start () {
+        aS = GetComponent<AudioSource>();
         StartCoroutine(OpenCurtain());
 	}
 
@@ -59,8 +62,9 @@ public class TitleScreen : MonoBehaviour {
     IEnumerator OpenCurtain() {
         while (blackScreen[0].transform.localScale.y > .1f) {
             foreach (Transform b in blackScreen) {
-                b.localScale = new Vector3(1, Mathf.Lerp(b.localScale.y, 0, .2f),1);
+                b.localScale = new Vector3(1, Mathf.Lerp(b.localScale.y, 0, .2f), 1);
             }
+            aS.volume = 1 - blackScreen[0].transform.localScale.y;
             yield return new WaitForSeconds(.02f);
         }
         foreach (Transform b in blackScreen) {
@@ -74,6 +78,7 @@ public class TitleScreen : MonoBehaviour {
             foreach (Transform b in blackScreen) {
                 b.localScale = new Vector3(1, Mathf.Lerp(b.localScale.y, 1, .2f), 1);
             }
+            aS.volume = 1 - blackScreen[0].transform.localScale.y;
             yield return new WaitForSeconds(.02f);
         }
         Application.Quit();
@@ -150,6 +155,7 @@ public class TitleScreen : MonoBehaviour {
             foreach (Transform b in blackScreen) {
                 b.localScale = new Vector3(1, Mathf.Lerp(b.localScale.y, 1, .2f), 1);
             }
+            aS.volume = 1 - blackScreen[0].transform.localScale.y;
             yield return new WaitForSeconds(.02f);
         }
         foreach (Transform b in blackScreen) {
@@ -165,11 +171,13 @@ public class TitleScreen : MonoBehaviour {
         while (dialoguePosition.color.a < .99f) {
             dialoguePosition.color = new Color(0.5f, 0, 0, Mathf.Lerp(dialoguePosition.color.a, 1, .2f));
             dialogueBackdrop.color = new Color(0f, 0f, 0f, dialoguePosition.color.a * .7f);
+            aS.volume = 1 - dialoguePosition.color.a;
             yield return new WaitForSeconds(.02f);
         }
 
         dialoguePosition.color = new Color(0.5f, 0, 0, 1);
         dialogueBackdrop.color = new Color(0f, 0f, 0f, .7f);
+        aS.volume = 0f;
         yield return new WaitForSeconds(textDuration);
 
         while (blackScreen[0].transform.localScale.y < .99f) {
