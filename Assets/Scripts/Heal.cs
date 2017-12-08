@@ -21,11 +21,15 @@ public class Heal : MonoBehaviour {
     private GameObject healParticle;
 
     private SpriteRenderer sr;
+    private Color green;
     private float initialTime;
 
     // Use this for initialization
     void Start () {
-        sr = GetComponent<SpriteRenderer>();
+        var srs = GetComponentsInChildren<SpriteRenderer>();
+        foreach(SpriteRenderer s in srs)
+            if (s.name == "Cross") sr = s;
+        green = sr.color;
 
         initialTime = Time.time;
         transform.position = new Vector3(transform.position.x, transform.position.y - sinHeight / 2, transform.position.z);
@@ -50,7 +54,9 @@ public class Heal : MonoBehaviour {
 
     void Pulse() {
         //transform.localScale = new Vector3(1 + scalePulse / 2 + Mathf.Sin(Time.time) * scalePulse / 2, 1 + scalePulse / 2 + Mathf.Sin(Time.time) * scalePulse / 2, 1);
-        sr.color = new Color(1, colorPulse / 2 + Mathf.Sin(Time.time + Mathf.PI/2) * colorPulse / 2, colorPulse / 2 + Mathf.Sin(Time.time + Mathf.PI / 2) * colorPulse / 2, 1);
+        sr.color = new Color(green.r + Mathf.Sin(Time.time * 10 + Mathf.PI / 2) * green.r / 2,
+            green.g + ((Mathf.Sin(Time.time * 10 + Mathf.PI) > 0) ? + Mathf.Sin(Time.time * 10 + Mathf.PI / 2) * green.r / 2 : + 0),
+            green.b + Mathf.Sin(Time.time * 10 + Mathf.PI / 2) * green.b / 2, 1);
     }
 
     private void OnTriggerEnter2D(Collider2D collision) {

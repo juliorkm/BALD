@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour {
 
+    public static List<GameObject> enemyList;
+
     [SerializeField]
     private GameObject[] enemyCells;
     [SerializeField]
@@ -17,6 +19,8 @@ public class EnemySpawner : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+        enemyList = new List<GameObject>();
+
         StartCoroutine(SpawnEnemies());
         StartCoroutine(SpawnHeal());
 
@@ -38,7 +42,8 @@ public class EnemySpawner : MonoBehaviour {
                 else
                     r -= chance[i];
             }
-            Instantiate(enemyCells[i], new Vector3(transform.position.x, Random.Range(-4,4),0), Quaternion.identity);
+            var e = Instantiate(enemyCells[i], new Vector3(transform.position.x, Random.Range(-4,4),0), Quaternion.identity);
+            enemyList.Add(e);
             yield return new WaitForSeconds(cooldown);
         }
     }

@@ -40,6 +40,7 @@ public class BasicEnemy : MonoBehaviour {
         if (health > 0)
             sr.sprite = healthSprites[health - 1];
         else {
+            EnemySpawner.enemyList.Remove(gameObject);
             Destroy(gameObject);
         }
     }
