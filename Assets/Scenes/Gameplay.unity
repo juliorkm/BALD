@@ -661,12 +661,16 @@ MonoBehaviour:
   - {fileID: 1034088119231290, guid: 44fb15e982e43524f9382b92b4a12ce0, type: 2}
   - {fileID: 1623313359454936, guid: 8267373c7ab5e2a48a8daa2ac1bd42ce, type: 2}
   - {fileID: 1168802630563396, guid: acb52b99d7121b746bd6b0bf7676f10a, type: 2}
-  healPickUp: {fileID: 1226914328095348, guid: 603331048f38b5a49945696af1a7e79d, type: 2}
   chance:
   - 0.2
   - 0.5
   - 0.3
   cooldown: 7
+  cooldownReduce: 0.5
+  pointsUntilCooldownReduce: 100
+  minimumCooldown: 2
+  maximumEnemies: 8
+  healPickUp: {fileID: 1226914328095348, guid: 603331048f38b5a49945696af1a7e79d, type: 2}
   healCooldown: 15
 --- !u!4 &520387124
 Transform:
@@ -889,7 +893,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: -916920498
+  randomSeed: 576212087
   InitialModule:
     serializedVersion: 3
     enabled: 1

@@ -9,11 +9,19 @@ public class EnemySpawner : MonoBehaviour {
     [SerializeField]
     private GameObject[] enemyCells;
     [SerializeField]
-    private GameObject healPickUp;
-    [SerializeField]
     private float[] chance;
     [SerializeField]
     private float cooldown;
+    [SerializeField]
+    private float cooldownReduce;
+    [SerializeField]
+    private int pointsUntilCooldownReduce;
+    [SerializeField]
+    private float minimumCooldown;
+    [SerializeField]
+    private int maximumEnemies;
+    [SerializeField]
+    private GameObject healPickUp;
     [SerializeField]
     private float healCooldown;
 
@@ -32,19 +40,27 @@ public class EnemySpawner : MonoBehaviour {
 
     }
 
+    private float DefactoCooldown() {
+        var c = cooldown - cooldownReduce * ScoreManager.score / pointsUntilCooldownReduce;
+        return (c > minimumCooldown) ? c : minimumCooldown;
+    }
+
     IEnumerator SpawnEnemies() {
         while (true) {
-            float r = Random.Range(0f, 1f);
-            int i = 0;
-            for (; i < enemyCells.Length; i++) {
-                if (r <= chance[i])
-                    break;
-                else
-                    r -= chance[i];
+            if (enemyList.Count < maximumEnemies) {
+                float r = Random.Range(0f, 1f);
+                int i = 0;
+                for (; i < enemyCells.Length; i++)
+                {
+                    if (r <= chance[i])
+                        break;
+                    else
+                        r -= chance[i];
+                }
+                var e = Instantiate(enemyCells[i], new Vector3(transform.position.x, Random.Range(-4, 4), 0), Quaternion.identity);
+                enemyList.Add(e);
             }
-            var e = Instantiate(enemyCells[i], new Vector3(transform.position.x, Random.Range(-4,4),0), Quaternion.identity);
-            enemyList.Add(e);
-            yield return new WaitForSeconds(cooldown);
+            yield return new WaitForSeconds(DefactoCooldown());
         }
     }
 
