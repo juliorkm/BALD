@@ -29,8 +29,14 @@ public class TitleScreen : MonoBehaviour {
     [SerializeField]
     private Image dialogueBackdrop;
     [SerializeField]
+    private Image gameOverBackdrop;
+    [SerializeField]
+    private Color dialogueColor;
+    [SerializeField]
     private RectTransform score;
     private Vector3 scoreFinalPosition;
+
+    private Vector3 backdropMidScale = new Vector3(.06f, 1f, 1f);
 
     private SceneState state = SceneState.NO_ESC;
     private bool canceledTheText = false;
@@ -112,19 +118,31 @@ public class TitleScreen : MonoBehaviour {
     }
 
     public IEnumerator IntroductionText() {
+        while (dialogueBackdrop.transform.localScale.y < .9f) {
+            dialogueBackdrop.transform.localScale = Vector3.Lerp(dialogueBackdrop.transform.localScale, backdropMidScale, .3f);
+            yield return new WaitForSeconds(.02f);
+        }
+        dialogueBackdrop.transform.localScale = backdropMidScale;
+
+        while (dialogueBackdrop.transform.localScale.x < .9f) {
+            dialogueBackdrop.transform.localScale = Vector3.Lerp(dialogueBackdrop.transform.localScale, Vector3.one, .3f);
+            yield return new WaitForSeconds(.02f);
+        }
+        dialogueBackdrop.transform.localScale = Vector3.one;
+
         foreach (string str in introductionTexts) {
             dialoguePosition.text = str;
-            dialoguePosition.color = new Color(0, 0, 0, 0);
+            dialoguePosition.color = new Color(dialogueColor.r, dialogueColor.g, dialogueColor.b, 0);
             while (dialoguePosition.color.a < .99f) {
                 if (canceledTheText) {
                     yield return CancelText();
                     yield break;
                 }
-                dialoguePosition.color = new Color(0, 0, 0, Mathf.Lerp(dialoguePosition.color.a, 1, .2f));
+                dialoguePosition.color = new Color(dialogueColor.r, dialogueColor.g, dialogueColor.b, Mathf.Lerp(dialoguePosition.color.a, 1, .2f));
                 yield return new WaitForSeconds(.02f);
             }
 
-            dialoguePosition.color = Color.black;
+            dialoguePosition.color = dialogueColor;
 
             for (int i = 0; i < 10; i++) {
                 if (canceledTheText) {
@@ -139,18 +157,44 @@ public class TitleScreen : MonoBehaviour {
                     yield return CancelText();
                     yield break;
                 }
-                dialoguePosition.color = new Color(0, 0, 0, Mathf.Lerp(dialoguePosition.color.a, 0, .2f));
+                dialoguePosition.color = new Color(dialogueColor.r, dialogueColor.g, dialogueColor.b, Mathf.Lerp(dialoguePosition.color.a, 0, .2f));
                 yield return new WaitForSeconds(.02f);
             }
         }
+
+        while (dialogueBackdrop.transform.localScale.x > backdropMidScale.x + .1f) {
+            dialogueBackdrop.transform.localScale = Vector3.Lerp(dialogueBackdrop.transform.localScale, backdropMidScale, .3f);
+            yield return new WaitForSeconds(.02f);
+        }
+        dialogueBackdrop.transform.localScale = backdropMidScale;
+
+        while (dialogueBackdrop.transform.localScale.y > .1f) {
+            dialogueBackdrop.transform.localScale = Vector3.Lerp(dialogueBackdrop.transform.localScale, Vector3.zero, .3f);
+            yield return new WaitForSeconds(.02f);
+        }
+        dialogueBackdrop.transform.localScale = Vector3.zero;
+
         state = SceneState.GAMEPLAY;
     }
 
     public IEnumerator CancelText() {
         while (dialoguePosition.color.a > .01f) {
-            dialoguePosition.color = new Color(0, 0, 0, Mathf.Lerp(dialoguePosition.color.a, 0, .2f));
+            dialoguePosition.color = new Color(dialogueColor.r, dialogueColor.g, dialogueColor.b, Mathf.Lerp(dialoguePosition.color.a, 0, .2f));
             yield return new WaitForSeconds(.02f);
         }
+
+        while (dialogueBackdrop.transform.localScale.x > backdropMidScale.x + .1f) {
+            dialogueBackdrop.transform.localScale = Vector3.Lerp(dialogueBackdrop.transform.localScale, backdropMidScale, .3f);
+            yield return new WaitForSeconds(.02f);
+        }
+        dialogueBackdrop.transform.localScale = backdropMidScale;
+
+        while (dialogueBackdrop.transform.localScale.y > .1f) {
+            dialogueBackdrop.transform.localScale = Vector3.Lerp(dialogueBackdrop.transform.localScale, Vector3.zero, .3f);
+            yield return new WaitForSeconds(.02f);
+        }
+        dialogueBackdrop.transform.localScale = Vector3.zero;
+
         state = SceneState.GAMEPLAY;
     }
 
@@ -177,13 +221,13 @@ public class TitleScreen : MonoBehaviour {
         dialoguePosition.text = "Game Over";
         while (dialoguePosition.color.a < .99f) {
             dialoguePosition.color = new Color(0.5f, 0, 0, Mathf.Lerp(dialoguePosition.color.a, 1, .2f));
-            dialogueBackdrop.color = new Color(0f, 0f, 0f, dialoguePosition.color.a * .7f);
+            gameOverBackdrop.color = new Color(0f, 0f, 0f, dialoguePosition.color.a * .7f);
             aS.volume = 1 - dialoguePosition.color.a;
             yield return new WaitForSeconds(.02f);
         }
 
         dialoguePosition.color = new Color(0.5f, 0, 0, 1);
-        dialogueBackdrop.color = new Color(0f, 0f, 0f, .7f);
+        gameOverBackdrop.color = new Color(0f, 0f, 0f, .7f);
         aS.volume = 0f;
         yield return new WaitForSeconds(textDuration);
 
