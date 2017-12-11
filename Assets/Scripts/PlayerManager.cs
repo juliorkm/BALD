@@ -34,7 +34,9 @@ public class PlayerManager : MonoBehaviour {
     // Use this for initialization
     void Awake () {
         screenBoundsUpper = Camera.main.ScreenToWorldPoint(new Vector2(Screen.width, Screen.height));
+        screenBoundsUpper -= .75f * Vector2.one;
         screenBoundsLower = Camera.main.ScreenToWorldPoint(new Vector2(0, 0));
+        screenBoundsLower += .75f * Vector2.one;
 
         GameObject v1;
         if (difficulty == CellState.BIG)

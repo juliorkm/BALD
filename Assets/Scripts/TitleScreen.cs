@@ -130,6 +130,11 @@ public class TitleScreen : MonoBehaviour {
         }
         dialogueBackdrop.transform.localScale = Vector3.one;
 
+        if (canceledTheText) {
+            yield return CancelText();
+            yield break;
+        }
+
         foreach (string str in introductionTexts) {
             dialoguePosition.text = str;
             dialoguePosition.color = new Color(dialogueColor.r, dialogueColor.g, dialogueColor.b, 0);
