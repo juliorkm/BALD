@@ -28,6 +28,9 @@ public class TitleScreen : MonoBehaviour {
     private Text dialoguePosition;
     [SerializeField]
     private Image dialogueBackdrop;
+    [SerializeField]
+    private RectTransform score;
+    private Vector3 scoreFinalPosition;
 
     private SceneState state = SceneState.NO_ESC;
     private bool canceledTheText = false;
@@ -37,6 +40,8 @@ public class TitleScreen : MonoBehaviour {
     void Start () {
         aS = GetComponent<AudioSource>();
         StartCoroutine(OpenCurtain());
+
+        scoreFinalPosition = new Vector3(-70, -25, 0);
 	}
 
     private void Update() {
@@ -90,6 +95,7 @@ public class TitleScreen : MonoBehaviour {
                 if (t != null)
                     t.localScale = new Vector3(Mathf.Lerp(t.localScale.x, 2f, .2f), Mathf.Lerp(t.localScale.y, 0, .2f), 1);
             }
+            score.anchoredPosition = Vector3.Lerp(score.anchoredPosition, scoreFinalPosition, .2f);
             yield return new WaitForSeconds(.02f);
         }
         foreach (Transform t in titleScreenUI) {
@@ -161,6 +167,7 @@ public class TitleScreen : MonoBehaviour {
         foreach (Transform b in blackScreen) {
             b.localScale = new Vector3(1, 1, 1);
         }
+        ScoreManager.SaveHiScore();
         SceneManager.LoadScene(0);
     }
 
@@ -189,6 +196,7 @@ public class TitleScreen : MonoBehaviour {
         foreach (Transform b in blackScreen) {
             b.localScale = new Vector3(1, 1, 1);
         }
+        ScoreManager.SaveHiScore();
         SceneManager.LoadScene(0);
     }
 

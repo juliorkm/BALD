@@ -7,6 +7,8 @@ public class BasicEnemy : MonoBehaviour {
     public int health;
     [SerializeField]
     private float speed;
+    [SerializeField]
+    private int pointsYielded;
 
     private SpriteRenderer sr;
     private Rigidbody2D rb;
@@ -41,6 +43,7 @@ public class BasicEnemy : MonoBehaviour {
             sr.sprite = healthSprites[health - 1];
         else {
             EnemySpawner.enemyList.Remove(gameObject);
+            ScoreManager.score += ScoreManager.PointConversion(pointsYielded);
             Destroy(gameObject);
         }
     }

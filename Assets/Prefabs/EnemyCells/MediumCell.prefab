@@ -91,6 +91,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 2
   speed: 5
+  pointsYielded: 20
   healthSprites:
   - {fileID: 21300000, guid: e1136a7508dae5943a10f24cff7a015d, type: 3}
   - {fileID: 21300000, guid: c4a5b9e5ddb6b404db9882ec0ab52516, type: 3}
@@ -107,6 +108,7 @@ SpriteRenderer:
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -122,6 +124,7 @@ SpriteRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
   m_SelectedEditorRenderState: 0
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
