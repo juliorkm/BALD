@@ -19,8 +19,6 @@ public class Cell : MonoBehaviour {
     [SerializeField]
     private GameObject bullet;
     [SerializeField]
-    private GameObject hurtParticle;
-    [SerializeField]
     private float shootCooldown;
 
     [HideInInspector]
@@ -46,7 +44,7 @@ public class Cell : MonoBehaviour {
     }
 
     void LerpVerticalPosition() {
-        transform.localPosition = Vector3.Lerp(transform.localPosition, new Vector3(0, centerPosition + targetPosition, transform.localPosition.z), .3f);
+        transform.localPosition = new Vector3(0, centerPosition + targetPosition, transform.localPosition.z);
     }
 
     void UpdateHealthSprite() {
@@ -88,18 +86,14 @@ public class Cell : MonoBehaviour {
     private void OnTriggerEnter2D(Collider2D collision) {
         if (collision.CompareTag("EnemyBullet") && !regroup) {
             if (collision != null) {
-                var p = Instantiate(hurtParticle, collision.transform.position, Quaternion.identity);
-                Destroy(p, p.GetComponent<ParticleSystem>().main.duration);
                 Destroy(collision.gameObject);
             }
             this.health--;
         }
         else if (collision.CompareTag("Enemy") && !regroup) {
             if (collision != null) {
-                var p = Instantiate(hurtParticle, collision.transform.position, Quaternion.identity);
-                Destroy(p, p.GetComponent<ParticleSystem>().main.duration);
+                this.health--;
             }
-            this.health--;
         }
     }
 }

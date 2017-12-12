@@ -18,8 +18,6 @@ public class BasicEnemy : MonoBehaviour {
     [SerializeField]
     private GameObject bullet;
     [SerializeField]
-    private GameObject hurtParticle;
-    [SerializeField]
     private float shootCooldown;
 
     private float position;
@@ -71,8 +69,6 @@ public class BasicEnemy : MonoBehaviour {
     private void OnTriggerEnter2D(Collider2D collision) {
         if (collision.CompareTag("PlayerBullet")) {
             if (collision != null) {
-                var p = Instantiate(hurtParticle, collision.transform.position, Quaternion.identity);
-                Destroy(p, p.GetComponent<ParticleSystem>().main.duration);
                 Destroy(collision.gameObject);
             }
             this.health--;
